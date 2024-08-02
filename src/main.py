@@ -25,7 +25,11 @@ def main():
     
     scraper = Scraper(session, config)
 
-    data = scraper.scrape_secure_page()
+    ready = False
+    if not ready:
+        print("Disable fully recursive scraping first!")
+        return
+    scraper.start_scraping()
 
     print(data)
 

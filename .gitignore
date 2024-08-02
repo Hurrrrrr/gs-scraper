@@ -3,3 +3,4 @@ creds.py
 myenv/
 *.pyc
 __pycache__/
+*.log
