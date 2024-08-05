@@ -1,4 +1,5 @@
 import time
+import random
 from bs4 import BeautifulSoup as bs
 import logging
 
@@ -28,7 +29,7 @@ class Scraper:
                 logging.info(f"Scraping leaf page: {leaf_url}")
                 self.scrape_leaf_page(leaf_url)
             
-            time.sleep(self.config['scraping']['delay'])
+            self.random_delay()
 
     def scrape_leaf_page(self, url):
         response = self.session.get(url)
@@ -47,3 +48,8 @@ class Scraper:
     def start_scraping(self):
         start_url = self.config['urls']['secure']
         self.crawl_hierarchy(start_url)
+    
+    def random_delay(self):
+        delay = random.uniform(self.config['scraping']['min_delay']
+                               self.config['scraping']['max_delay'])
+        time.sleep(delay)
