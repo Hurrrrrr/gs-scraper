@@ -4,6 +4,7 @@ from auth import Authenticator
 from utils import load_config
 import os
 import sys
+from playwright.sync_api import sync_playwright
 
 def main():
 
@@ -19,40 +20,22 @@ def main():
 
     config_path = os.path.join(project_root, 'config', 'config.yaml')
     config = load_config(config_path)
-
-    auth = Authenticator(config['urls']['login'], config['credentials'])
-    session = auth.login()
     
-    scraper = Scraper(session, config)
-
-    ready = True
-    if not ready:
-        print("Disable fully recursive scraping first!")
-        return
-    scraper.start_scraping()
-
-    print(data)
-
-    # get the login page to retrieve viewstate info which is unique to each session
-    # session = requests.Session()
-    # response = session.get(login_url)
-    # soup = bs(response.text, "html.parser")
-    # viewstate = soup.find("input", {'name': '__VIEWSTATE'})['value']
-    # viewstategenerator = soup.find("input", {'name': '__VIEWSTATEGENERATOR'})['value']
-
-    # payload = {
-    #     '__VIEWSTATE': viewstate,
-    #     '__VIEWSTATEGENERATOR': viewstategenerator,
-    #     'fragment-7717_action': 'login',
-    #     'fragment-7717_provider': '',
-    #     'fragment-7717_username': creds.username,
-    #     'fragment-7717_password': creds.password,
-    #     'fragment-7717_rememberMe': 'on'
-    # }
-
-    # response = session.post(login_url, data=payload)
-    # print(response.status_code)
-    # print(response.url)
+    with sync_playwright() as playwright:
+        scraper = Scraper(config, playwright)
+        try:
+            scraper.login()
+            ready = True
+            if not ready:
+                print("Disable fully recursive scraping first!")
+                return
+            scraper.start_scraping()
+        
+        except Exception as e:
+            logging.error(f"An error occurred: {str(e)}")
+        
+        finally:
+            scraper.close()
 
 if __name__ == "__main__":
     main()

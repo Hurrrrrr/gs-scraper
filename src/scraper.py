@@ -5,9 +5,9 @@ import logging
 from playwright.sync_api import sync_playwright
 
 class Scraper:
-    def __init__(self, config):
+    def __init__(self, config, playwright):
         self.config = config
-        self.playwright= sync_playwright().start()
+        self.playwright = playwright
         self.browser = self.playwright.chromium.launch(headless=True)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
@@ -65,3 +65,9 @@ class Scraper:
         delay = random.uniform(self.config['scraping']['min_delay'],
                                self.config['scraping']['max_delay'])
         time.sleep(delay)
+    
+    def close(self):
+        self.context.close()
+        self.browser.close()
+        if hasattr(self, 'playwright'):
+            self.playwright.stop()
