@@ -25,7 +25,7 @@ def main():
     
     scraper = Scraper(session, config)
 
-    ready = False
+    ready = True
     if not ready:
         print("Disable fully recursive scraping first!")
         return
