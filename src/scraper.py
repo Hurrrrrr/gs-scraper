@@ -13,13 +13,44 @@ class Scraper:
         self.page = self.context.new_page()
     
     def login(self):
-        self.page.goto(self.config['urls']['login'])
-        self.page.fill('input[name="username"]', self.config['credentials']['username'])
-        self.page.fill('input[name="password]', self.config['credentials']['password'])
-        self.page.click('button[type="submit"]')
+        print("starting login")
+        login_url = self.config['urls']['login']
+        self.page.goto(login_url)
         self.page.wait_for_load_state('networkidle')
+
+        html_content = self.page.content()
+        soup = bs(html_content, 'html.parser')
+
+        viewstate = soup.find("input", {'name': '__VIEWSTATE'})['value']
+        viewstategenerator = soup.find("input", {'name': '__VIEWSTATEGENERATOR'})['value']
+        self.page.fill('input[name="fragment-7717_username"]', self.config['credentials']['username'])
+        self.page.fill('input[name="fragment-7717_password"]', self.config['credentials']['password'])
+        self.page.evaluate(f"""
+            document.querySelector('input[name="__VIEWSTATE"]').value = '{viewstate}';
+            document.querySelector('input[name="__VIEWSTATEGENERATOR"]').value = '{viewstategenerator}';
+            document.querySelector('input[name="fragment-7717_action"]').value = 'login';
+            document.querySelector('input[name="fragment-7717_provider"]').value = '';
+            document.querySelector('input[name="fragment-7717_rememberMe"]').checked = true;
+        """)
+
+        submit_button = self.page.query_selector('a.internal-link.login.submit-button.button')
+        if submit_button:
+            submit_button.click()
+        else:
+            logging.error("Submit button not found")
+            logging.info({self.page.content})
+            raise Exception("Login failed, submit button not found")
+
+        self.page.wait_for_load_state('networkidle')
+
+        if self.is_login_successful():
+            logging.info("Login Successful")
+        else:
+            logging.error("Login failed: Invalid Credentials")
+            raise Exception("Login failed: Invalid Credentials")
     
     def crawl_hierarchy(self, url):
+        print("crawling")
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
 
@@ -57,9 +88,22 @@ class Scraper:
 
         return None
     
+    def is_login_successful(self):
+        print("checking login success")
+        if "Invalid Credentials" in self.page.content():
+            return False    
+        else:
+            return True
+    
     def start_scraping(self):
-        start_url = self.config['urls']['secure']
-        self.crawl_hierarchy(start_url)
+        print("starting scraping")
+        try:
+            self.login()
+            start_url = self.config['urls']['secure']
+            self.crawl_hierarchy(start_url)
+        except Exception as e:
+            logging.error(f"Scraping error {str(e)}")
+            raise
     
     def random_delay(self):
         delay = random.uniform(self.config['scraping']['min_delay'],
@@ -67,6 +111,7 @@ class Scraper:
         time.sleep(delay)
     
     def close(self):
+        print("closing")
         self.context.close()
         self.browser.close()
         if hasattr(self, 'playwright'):

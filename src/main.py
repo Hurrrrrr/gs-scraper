@@ -20,20 +20,15 @@ def main():
 
     config_path = os.path.join(project_root, 'config', 'config.yaml')
     config = load_config(config_path)
+
+    print("finished main setup, starting sync_playwright")
     
     with sync_playwright() as playwright:
         scraper = Scraper(config, playwright)
         try:
-            scraper.login()
-            ready = True
-            if not ready:
-                print("Disable fully recursive scraping first!")
-                return
             scraper.start_scraping()
-        
         except Exception as e:
             logging.error(f"An error occurred: {str(e)}")
-        
         finally:
             scraper.close()
 
