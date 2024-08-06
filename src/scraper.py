@@ -3,6 +3,7 @@ import random
 from bs4 import BeautifulSoup as bs
 import logging
 from playwright.sync_api import sync_playwright
+import urllib.parse
 
 class Scraper:
     def __init__(self, config, playwright):
@@ -66,19 +67,29 @@ class Scraper:
         counter = 0
         for item in hierarchy_items:
             print(f"item iteration {counter}")
-            link= item.query_selector('a')
+            print(f"item: {item}")
+            link = item.query_selector('a')
+            print(f"link: {link}")
             if link:
                 href = link.get_attribute('href')
+                if href is None:
+                    print(f"Empty href for {item}")
+                normalized_href = self.normalize_url(href)
                 title = link.inner_text()
+                item_class = item.get_attribute('class')
 
-                if 'with-children' in item.get_attribute('class'):
-                    child_url = item.get_attribute('href')
-                    print(f"Crawling child hierarchy: {child_url}")
-                    self.crawl_hierarchy(child_url)
+                print(f"Title: {title}")
+                print(f"Original URL: {href}")
+                print(f"Normalised URL: {normalized_href}")
+
+                if 'with-children' in item_class:
+                    print(f"Crawling child hierarchy: {normalized_href}")
+                    self.crawl_hierarchy(normalized_href)
                 else:
-                    leaf_url = item.get_attribute('href')
-                    print(f"Scraping leaf page: {leaf_url}")
-                    self.scrape_leaf_page(leaf_url)
+                    print(f"Scraping leaf page: {normalized_href}")
+                    self.scrape_leaf_page(normalized_href)
+            else:
+                print(f"No link for item {item}")
             
             self.random_delay()
 
@@ -102,10 +113,21 @@ class Scraper:
     
     def is_login_successful(self):
         print("checking login success")
-        if "Invalid Credentials" in self.page.content():
+        TARGET_PAGE_ERROR = "Invalid Credentials"
+        if TARGET_PAGE_ERROR in self.page.content():
             return False    
         else:
             return True
+        
+    def normalize_url(self, href_string):
+        if href_string.startswith('http'):
+            return href_string
+        elif href_string.startswith('//'):
+            return 'https:' + href_string
+        elif href_string.startswith('/'):
+            return urllib.parse.urljoin(self.config['urls']['base'], href_string)
+        else:
+            return urllib.parse.urljoin(self.config['urls']['base'] + '/', href_string)
     
     def start_scraping(self):
         try:
