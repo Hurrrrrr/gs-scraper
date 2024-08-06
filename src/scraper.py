@@ -50,23 +50,35 @@ class Scraper:
             raise Exception("Login failed: Invalid Credentials")
     
     def crawl_hierarchy(self, url):
-        print("crawling")
+        print(f"crawling {url}")
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
 
-        hierarchy_items = self.page.query_selector_all('a.hierarchy-item')
+        hierarchy_items = self.page.query_selector_all('div.hierarchy-item:not(.selected)')
+        print(hierarchy_items)
+
+        if not hierarchy_items:
+            print("No hierarchy items found. Printing page content:")
+            print(self.page.content())
+            return
 
         # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
         counter = 0
         for item in hierarchy_items:
-            if 'with-children' in item.get_attribute('class'):
-                child_url = item.get_attribute('href')
-                logging.info(f"Crawling child hierarchy: {child_url}")
-                self.crawl_hierarchy(child_url)
-            else:
-                leaf_url = item.get_attribute('href')
-                logging.info(f"Scraping leaf page: {leaf_url}")
-                self.scrape_leaf_page(leaf_url)
+            print(f"item iteration {counter}")
+            link= item.query_selector('a')
+            if link:
+                href = link.get_attribute('href')
+                title = link.inner_text()
+
+                if 'with-children' in item.get_attribute('class'):
+                    child_url = item.get_attribute('href')
+                    print(f"Crawling child hierarchy: {child_url}")
+                    self.crawl_hierarchy(child_url)
+                else:
+                    leaf_url = item.get_attribute('href')
+                    print(f"Scraping leaf page: {leaf_url}")
+                    self.scrape_leaf_page(leaf_url)
             
             self.random_delay()
 
@@ -96,10 +108,10 @@ class Scraper:
             return True
     
     def start_scraping(self):
-        print("starting scraping")
         try:
             self.login()
             start_url = self.config['urls']['secure']
+            print("starting scraping")
             self.crawl_hierarchy(start_url)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
