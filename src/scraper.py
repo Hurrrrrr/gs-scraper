@@ -50,10 +50,20 @@ class Scraper:
             logging.error("Login failed: Invalid Credentials")
             raise Exception("Login failed: Invalid Credentials")
     
-    def crawl_hierarchy(self, url, parent_url=None):
-        print(f"crawling {url}")
+    def crawl_hierarchy(self, url, parent_url=None, depth = 0):
+        print(f"{'  ' * depth}crawling {url} (Parent = {parent_url})")
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
+
+        current_item = self.page.query_selector('div.hierarchy-item.selected')
+        if not current_item:
+            print(f"{'  ' * depth}Cannot find item in hierarchy")
+            return
+        
+        children_container = current_item.query_selector('+ div.hierarchy-children')
+        if not children_container:
+            print(f"{'  ' * depth}No children found for this page")
+            return
 
         hierarchy_items = self.page.query_selector_all('div.hierarchy-item:not(.selected)')
 
@@ -62,12 +72,18 @@ class Scraper:
             print(self.page.content())
             return
 
+        print(f"{'  ' * depth}Found {len(hierarchy_items)} items on {url}")
+        for index, item in enumerate(hierarchy_items):
+            item_html = item.evaluate('(element) => element.outerHTML')
+            print(f"{'  ' * depth}Item {index}: {item_html}")
+
+
         # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
         self.random_delay()
 
         for item in hierarchy_items:
-            item_html= item.evaluate('(element) => element.outerHTML')
-            print(f"item: {item_html}")
+            # item_html= item.evaluate('(element) => element.outerHTML')
+            # print(f"item: {item_html}")
 
             link = item.query_selector('a')
             if link:
@@ -81,33 +97,33 @@ class Scraper:
 
                 normalized_href = self.normalize_url(href)
                 if normalized_href == parent_url:
-                    print("Skipping parent URL")
+                    print(f"{'  ' * depth}Skipping parent URL {normalized_href}")
                     continue
 
                 title = link.inner_text()
                 item_class = item.get_attribute('class')
 
-                print(f"Title: {title}")
-                print(f"Original URL: {href}")
-                print(f"Normalised URL: {normalized_href}")
+                print(f"{'  ' * depth}Title: {title}")
+                print(f"{'  ' * depth}Original URL: {href}")
+                print(f"{'  ' * depth}Normalised URL: {normalized_href}")
 
                 if 'with-children' in item_class:
                     expand_collapse = link.query_selector('span.expand-collapse')
                     if expand_collapse and 'collapsed' in expand_collapse.get_attribute('class'):
-                        print(f"Expanding: {title}")
+                        print(f"{'  ' * depth}Expanding: {title}")
                         expand_collapse.click()
                         self.page.wait_for_load_state('networkidle')
 
-                    print(f"Crawling child hierarchy: {normalized_href}")
+                    print(f"{'  ' * depth}Crawling child hierarchy: {normalized_href}")
                     self.crawl_hierarchy(normalized_href)
                 else:
-                    print(f"Scraping leaf page: {normalized_href}")
+                    print(f"{'  ' * depth}Scraping leaf page: {normalized_href}")
                     self.scrape_leaf_page(normalized_href)
             else:
-                print(f"No link for item {item}")
+                print(f"{'  ' * depth}No link for item {item}")
 
         if parent_url:
-            print(f"Returning to parent URL {parent_url}")
+            print(f"{'  ' * depth}Returning to parent URL {parent_url}")
             self.page.goto(parent_url)
             self.page.wait_for_load_state('networkidle')
 
