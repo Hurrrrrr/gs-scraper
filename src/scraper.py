@@ -87,12 +87,9 @@ class Scraper:
 
             link = item.query_selector('a')
             if link:
-                link_html = link.evaluate('(element) => element.outerHTML')
-                print(f"link: {link_html}")
-
                 href = link.get_attribute('href')
                 if href is None:
-                    print(f"Empty href for {item}")
+                    print(f"{'  ' * depth}Empty href for {item}")
                     continue
 
                 normalized_href = self.normalize_url(href)
@@ -115,7 +112,7 @@ class Scraper:
                         self.page.wait_for_load_state('networkidle')
 
                     print(f"{'  ' * depth}Crawling child hierarchy: {normalized_href}")
-                    self.crawl_hierarchy(normalized_href)
+                    self.crawl_hierarchy(normalized_href, parent_url=url, depth=depth + 1)
                 else:
                     print(f"{'  ' * depth}Scraping leaf page: {normalized_href}")
                     self.scrape_leaf_page(normalized_href)
@@ -164,7 +161,7 @@ class Scraper:
             self.login()
             start_url = self.config['urls']['secure']
             print("starting scraping")
-            self.crawl_hierarchy(start_url)
+            self.crawl_hierarchy(start_url, parent_url=None, depth=0)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
             raise
