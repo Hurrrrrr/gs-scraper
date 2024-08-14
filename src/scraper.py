@@ -56,7 +56,6 @@ class Scraper:
         self.page.wait_for_load_state('networkidle')
 
         hierarchy_items = self.page.query_selector_all('div.hierarchy-item:not(.selected)')
-        print(hierarchy_items)
 
         if not hierarchy_items:
             print("No hierarchy items found. Printing page content:")
@@ -67,10 +66,15 @@ class Scraper:
         counter = 0
         for item in hierarchy_items:
             print(f"item iteration {counter}")
-            print(f"item: {item}")
+            
+            item_html= item.evaluate('(element) => element.outerHTML')
+            print(f"item: {item_html}")
+
             link = item.query_selector('a')
-            print(f"link: {link}")
             if link:
+                link_html = link.evaluate('(element) => element.outerHTML')
+                print(f"link: {link_html}")
+
                 href = link.get_attribute('href')
                 if href is None:
                     print(f"Empty href for {item}")

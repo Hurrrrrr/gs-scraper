@@ -1,0 +1,372 @@
+
+<li data-pageid="186">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france"><span class="expand-collapse expanded">-</span>France</a>
+            </div>
+                                                                                                            <div class="hierarchy-children">
+                <ul class="hierarchy-list">
+                                    <li data-pageid="381">
+    <div class="hierarchy-item selected with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/381/alsace-and-lorraine"><span class="expand-collapse expanded">-</span>Alsace and Lorraine</a>
+            </div>
+                                                                                                            <div class="hierarchy-children" style="">
+                <ul class="hierarchy-list">
+                                    <li data-pageid="407">
+    <div class="hierarchy-item without-children">
+                        <a href="https://www.guildsomm.com/research/compendium/w/france/407/alsace-vin-d-alsace-aop">Alsace/Vin d'Alsace AOP</a>
+        </div>
+                            </li>
+        <li data-pageid="410">
+    <div class="hierarchy-item without-children">
+                        <a href="https://www.guildsomm.com/research/compendium/w/france/410/cremant-d-alsace-aop">Crémant d'Alsace AOP</a>
+        </div>
+                            </li>
+        <li data-pageid="411">
+    <div class="hierarchy-item without-children">
+                        <a href="https://www.guildsomm.com/research/compendium/w/france/411/cotes-de-toul-aop">Côtes de Toul AOP</a>
+        </div>
+                            </li>
+        <li data-pageid="1147">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/1147/grand-cru-appellations-of-alsace"><span class="expand-collapse expanded">-</span>Grand Cru Appellations of Alsace</a>
+            </div>
+                                            <div class="hierarchy-children" style="">
+    <ul class="hierarchy-list">
+                    <li data-pageid="408">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/408/alsace-grand-cru-aop">Alsace Grand Cru AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1150">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1150/alsace-grand-cru-altenberg-de-bergbieten-aop">Alsace Grand Cru Altenberg de Bergbieten AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1146">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1146/alsace-grand-cru-altenberg-de-bergheim-aop">Alsace Grand Cru&nbsp;Altenberg de Bergheim AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1151">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1151/alsace-grand-cru-altenberg-de-wolxheim-aop">Alsace Grand Cru&nbsp;Altenberg de Wolxheim AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1152">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1152/alsace-grand-cru-brand-aop">Alsace Grand Cru&nbsp;Brand AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1153">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1153/alsace-grand-cru-bruderthal-aop">Alsace Grand Cru&nbsp;Bruderthal AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1154">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1154/alsace-grand-cru-eichberg-aop">Alsace Grand Cru&nbsp;Eichberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1155">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1155/alsace-grand-cru-engelberg-aop">Alsace Grand Cru&nbsp;Engelberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1156">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1156/alsace-grand-cru-florimont-aop">Alsace Grand Cru&nbsp;Florimont AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1157">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1157/alsace-grand-cru-frankstein-aop">Alsace Grand Cru&nbsp;Frankstein AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1158">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1158/alsace-grand-cru-froehn-aop">Alsace Grand Cru&nbsp;Froehn AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1159">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1159/alsace-grand-cru-furstentum-aop">Alsace Grand Cru&nbsp;Furstentum AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1160">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1160/alsace-grand-cru-geisberg-aop">Alsace Grand Cru&nbsp;Geisberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1201">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1201/alsace-grand-cru-gloeckelberg-aop">Alsace Grand Cru Gloeckelberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1162">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1162/alsace-grand-cru-goldert-aop">Alsace Grand Cru&nbsp;Goldert AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1163">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1163/alsace-grand-cru-hatschbourg-aop">Alsace Grand Cru&nbsp;Hatschbourg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1164">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1164/alsace-grand-cru-hengst-aop">Alsace Grand Cru&nbsp;Hengst AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1165">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1165/alsace-grand-cru-kaefferkopf-aop">Alsace Grand Cru&nbsp;Kaefferkopf AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1166">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1166/alsace-grand-cru-kanzlerberg-aop">Alsace Grand Cru&nbsp;Kanzlerberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1167">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1167/alsace-grand-cru-kastelberg-aop">Alsace Grand Cru&nbsp;Kastelberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1168">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1168/alsace-grand-cru-kessler-aop">Alsace Grand Cru&nbsp;Kessler AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1169">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1169/alsace-grand-cru-kirchberg-de-barr-aop">Alsace Grand Cru&nbsp;Kirchberg de Barr AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1170">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1170/alsace-grand-cru-kirchberg-de-ribeauville-aop">Alsace Grand Cru&nbsp;Kirchberg de Ribeauvillé AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1171">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1171/alsace-grand-cru-kitterle-aop">Alsace Grand Cru&nbsp;Kitterlé AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1172">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1172/alsace-grand-cru-mambourg-aop">Alsace Grand Cru&nbsp;Mambourg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1173">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1173/alsace-grand-cru-mandelberg-aop">Alsace Grand Cru&nbsp;Mandelberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1174">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1174/alsace-grand-cru-marckrain-aop">Alsace Grand Cru&nbsp;Marckrain AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1175">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1175/alsace-grand-cru-moenchberg-aop">Alsace Grand Cru&nbsp;Moenchberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1176">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1176/alsace-grand-cru-muenchberg-aop">Alsace Grand Cru&nbsp;Muenchberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1177">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1177/alsace-grand-cru-ollwiller-aop">Alsace Grand Cru&nbsp;Ollwiller AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1178">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1178/alsace-grand-cru-osterberg-aop">Alsace Grand Cru&nbsp;Osterberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1179">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1179/alsace-grand-cru-pfersigberg-aop">Alsace Grand Cru&nbsp;Pfersigberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1180">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1180/alsace-grand-cru-pfingstberg-aop">Alsace Grand Cru&nbsp;Pfingstberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1181">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1181/alsace-grand-cru-praelatenberg-aop">Alsace Grand Cru&nbsp;Praelatenberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1182">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1182/alsace-grand-cru-rangen-aop">Alsace Grand Cru&nbsp;Rangen AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1183">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1183/alsace-grand-cru-rosacker-aop">Alsace Grand Cru&nbsp;Rosacker AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1184">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1184/alsace-grand-cru-saering-aop">Alsace Grand Cru&nbsp;Saering AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1185">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1185/alsace-grand-cru-schlossberg-aop">Alsace Grand Cru&nbsp;Schlossberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1186">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1186/alsace-grand-cru-schoenenbourg-aop">Alsace Grand Cru&nbsp;Schoenenbourg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1187">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1187/alsace-grand-cru-sommerberg-aop">Alsace Grand Cru&nbsp;Sommerberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1188">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1188/alsace-grand-cru-sonnenglanz-aop">Alsace Grand Cru&nbsp;Sonnenglanz AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1189">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1189/alsace-grand-cru-spiegel-aop">Alsace Grand Cru&nbsp;Spiegel AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1190">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1190/alsace-grand-cru-sporen-aop">Alsace Grand Cru&nbsp;Sporen AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1191">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1191/alsace-grand-cru-steinert-aop">Alsace Grand Cru&nbsp;Steinert AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1192">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1192/alsace-grand-cru-steingrubler-aop">Alsace Grand Cru&nbsp;Steingrubler AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1193">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1193/alsace-grand-cru-steinklotz-aop">Alsace Grand Cru&nbsp;Steinklotz AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1194">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1194/alsace-grand-cru-vorbourg-aop">Alsace Grand Cru&nbsp;Vorbourg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1195">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1195/alsace-grand-cru-wiebelsberg-aop">Alsace Grand Cru&nbsp;Wiebelsberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1196">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1196/alsace-grand-cru-wineck-schlossberg-aop">Alsace Grand Cru&nbsp;Wineck-Schlossberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1197">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1197/alsace-grand-cru-winzenberg-aop">Alsace Grand Cru&nbsp;Winzenberg AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1199">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1199/alsace-grand-cru-zinnkoepfle-aop">Alsace Grand Cru&nbsp;Zinnkoepflé AOP</a>
+            </div>
+                    </li>
+                            <li data-pageid="1200">
+        <div class="hierarchy-item without-children">
+                                <a href="/research/compendium/w/france/1200/alsace-grand-cru-zotzenberg-aop">Alsace Grand Cru&nbsp;Zotzenberg AOP</a>
+            </div>
+                    </li>
+                </ul>
+</div></li>
+        <li data-pageid="412">
+    <div class="hierarchy-item without-children">
+                        <a href="https://www.guildsomm.com/research/compendium/w/france/412/moselle-aop">Moselle AOP</a>
+        </div>
+                                                                        </li>
+                </ul>
+            </div>
+                                                                </li><li data-pageid="94">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/94/bordeaux"><span class="expand-collapse collapsed">+</span>Bordeaux</a>
+            </div>
+                                            </li>
+        <li data-pageid="76">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/76/burgundy"><span class="expand-collapse collapsed">+</span>Burgundy</a>
+            </div>
+                                            </li>
+        <li data-pageid="62">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/62/champagne"><span class="expand-collapse collapsed">+</span>Champagne</a>
+            </div>
+                                            </li>
+        <li data-pageid="1204">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/1204/charente"><span class="expand-collapse collapsed">+</span>Charente</a>
+            </div>
+                                            </li>
+        <li data-pageid="390">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/390/corsica"><span class="expand-collapse collapsed">+</span>Corsica</a>
+            </div>
+                                            </li>
+        <li data-pageid="1656">
+    <div class="hierarchy-item without-children">
+                        <a href="https://www.guildsomm.com/research/compendium/w/france/1656/igp-regions-in-france">IGP Regions in France</a>
+        </div>
+                            </li>
+        <li data-pageid="397">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/397/jura-and-savoie"><span class="expand-collapse collapsed">+</span>Jura and Savoie</a>
+            </div>
+                                            </li>
+        <li data-pageid="106">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/106/languedoc"><span class="expand-collapse collapsed">+</span>Languedoc</a>
+            </div>
+                                            </li>
+        <li data-pageid="398">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/398/loire-valley"><span class="expand-collapse collapsed">+</span>Loire Valley</a>
+            </div>
+                                            </li>
+        <li data-pageid="391">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/391/provence"><span class="expand-collapse collapsed">+</span>Provence</a>
+            </div>
+                                            </li>
+        <li data-pageid="405">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/405/rhone-valley"><span class="expand-collapse collapsed">+</span>Rhône Valley</a>
+            </div>
+                                            </li>
+        <li data-pageid="107">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/107/roussillon"><span class="expand-collapse collapsed">+</span>Roussillon</a>
+            </div>
+                                            </li>
+        <li data-pageid="104">
+    <div class="hierarchy-item with-children">
+                                            <a href="https://www.guildsomm.com/research/compendium/w/france/104/southwest-france"><span class="expand-collapse collapsed">+</span>Southwest France</a>
+            </div>
+                                                        </li>
+        </ul>
+    </div>
+                    </li>
+        
