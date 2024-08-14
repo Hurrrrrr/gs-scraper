@@ -64,7 +64,9 @@ class Scraper:
 
         # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
         counter = 0
+        self.random_delay()
         for item in hierarchy_items:
+
             print(f"item iteration {counter}")
             
             item_html= item.evaluate('(element) => element.outerHTML')
@@ -94,8 +96,7 @@ class Scraper:
                     self.scrape_leaf_page(normalized_href)
             else:
                 print(f"No link for item {item}")
-            
-            self.random_delay()
+        
 
             # temporary for testing
             counter = counter + 1
@@ -103,6 +104,7 @@ class Scraper:
                 break
 
     def scrape_leaf_page(self, url):
+        self.random_delay()
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
         html_content = self.page.content()
