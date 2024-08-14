@@ -50,7 +50,7 @@ class Scraper:
             logging.error("Login failed: Invalid Credentials")
             raise Exception("Login failed: Invalid Credentials")
     
-    def crawl_hierarchy(self, url):
+    def crawl_hierarchy(self, url, parent_url=None):
         print(f"crawling {url}")
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
@@ -63,12 +63,9 @@ class Scraper:
             return
 
         # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
-        counter = 0
         self.random_delay()
-        for item in hierarchy_items:
 
-            print(f"item iteration {counter}")
-            
+        for item in hierarchy_items:
             item_html= item.evaluate('(element) => element.outerHTML')
             print(f"item: {item_html}")
 
@@ -80,7 +77,13 @@ class Scraper:
                 href = link.get_attribute('href')
                 if href is None:
                     print(f"Empty href for {item}")
+                    continue
+
                 normalized_href = self.normalize_url(href)
+                if normalized_href == parent_url:
+                    print("Skipping parent URL")
+                    continue
+
                 title = link.inner_text()
                 item_class = item.get_attribute('class')
 
@@ -89,6 +92,12 @@ class Scraper:
                 print(f"Normalised URL: {normalized_href}")
 
                 if 'with-children' in item_class:
+                    expand_collapse = link.query_selector('span.expand-collapse')
+                    if expand_collapse and 'collapsed' in expand_collapse.get_attribute('class'):
+                        print(f"Expanding: {title}")
+                        expand_collapse.click()
+                        self.page.wait_for_load_state('networkidle')
+
                     print(f"Crawling child hierarchy: {normalized_href}")
                     self.crawl_hierarchy(normalized_href)
                 else:
@@ -96,12 +105,11 @@ class Scraper:
                     self.scrape_leaf_page(normalized_href)
             else:
                 print(f"No link for item {item}")
-        
 
-            # temporary for testing
-            counter = counter + 1
-            if counter > 10:
-                break
+        if parent_url:
+            print(f"Returning to parent URL {parent_url}")
+            self.page.goto(parent_url)
+            self.page.wait_for_load_state('networkidle')
 
     def scrape_leaf_page(self, url):
         self.random_delay()
