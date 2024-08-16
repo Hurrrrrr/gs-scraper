@@ -108,15 +108,10 @@ class Scraper:
 
                 normalized_href = self.normalize_url(href)
                 title = link.inner_text()
-                item_class = item.get_attribute('class')
 
                 print(f"{'  ' * depth}Title: {title}")
                 print(f"{'  ' * depth}Original URL: {href}")
                 print(f"{'  ' * depth}Normalised URL: {normalized_href}")
-
-                if 'with-children' in item_class:
-                    expand_collapse = link.query_selector('span.expand-collapse')
-                    self.expand_collapse_with_retry(expand_collapse, title, depth)
                 
                 queue.append((normalized_href, depth + 1))
 
@@ -162,35 +157,9 @@ class Scraper:
             else:
                 print(f"Failed to scrape {url} after max retries")
                 logging.error(f"Error occurred while scraping {url}: {str(e)}")
-    
-    def expand_collapse_with_retry(self, expand_collapse, title, depth):
-        for attempt in range(self.MAX_RETRIES):
-            try:
-                if expand_collapse and 'collapsed' in expand_collapse.get_attribute('class'):
-                        print(f"{'  ' * depth}Expanding: {title}")
-                        expand_collapse.click()
-                        self.page.wait_for_load_state('networkidle')
-                        return True
-                else:
-                    return False
-            except PlaywrightTimeoutError:
-                logging.warning(f"Timeout while expanding {title}. Retrying...")
-            except Exception as e:
-                logging.warning(f"Error while expanding {title}: {str(e)}. Retrying...")
-
-            if attempt < self.MAX_RETRIES - 1:
-                wait_time = 2 ** attempt
-                logging.warning(f"Retrying expand/collapse for {title} (Attempt {attempt + 1}/{self.MAX_RETRIES})")
-                time.sleep(wait_time)
-            else:
-                logging.error(f"Failed to expand/collapse {title} after {self.MAX_RETRIES} attempts")
-                return False
         
         return False
 
-
-
-    
     def is_login_successful(self):
         print("checking login success")
         TARGET_PAGE_ERROR = "Invalid Credentials"
