@@ -65,26 +65,26 @@ class Scraper:
                 continue
 
             print(f"{'  ' * depth}Crawling {url}")
-            self.visited_urls.add(url)
 
             try:
                 self.random_delay()
                 self.page.goto(url)
                 self.page.wait_for_load_state('networkidle')
+                self.visited_urls.add(url)
             except PlaywrightTimeoutError:
                 print(f"Timeout occurred loading {url}")
-                return
+                continue
 
             current_item = self.page.query_selector('div.hierarchy-item.selected')
             if not current_item:
                 print(f"{'  ' * depth}Cannot find item in hierarchy")
-                return
+                continue
         
             children_container = current_item.query_selector('+ div.hierarchy-children')
             if not children_container:
                 print(f"{'  ' * depth}No children found for this page")
                 self.scrape_leaf_page(url)
-                return
+                continue
 
             hierarchy_items = children_container.query_selector_all('> ul.hierarchy-list > li > div.hierarchy-item')
         
