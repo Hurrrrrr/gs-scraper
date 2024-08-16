@@ -5,6 +5,7 @@ import logging
 from playwright.sync_api import sync_playwright
 import urllib.parse
 from requests.exceptions import RequestException
+from collections import deque
 
 class Scraper:
     def __init__(self, config, playwright):
@@ -14,6 +15,7 @@ class Scraper:
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
+        self.MAX_RETRIES = 3
     
     def login(self):
         print("starting login")
@@ -52,50 +54,55 @@ class Scraper:
             logging.error("Login failed: Invalid Credentials")
             raise Exception("Login failed: Invalid Credentials")
     
-    def crawl_hierarchy(self, url, parent_url=None, depth = 0):
-        print(f"{'  ' * depth}crawling {url} (Parent = {parent_url})")
+    def crawl_hierarchy(self, start_url):
+        queue = deque([(start_url, 0)]) # (url, depth)
 
-        if url in self.visited_urls:
-            print(f"{'  ' * depth}Already visited {url}, skipping")
+        while queue:
+            url, depth = queue.popleft()
 
-        self.visited_urls.add(url)
+            if url in self.visited_urls:
+                print(f"{'  ' * depth}Already visited {url}, skipping")
+                continue
 
-        try:
-            self.page.goto(url)
-            self.page.wait_for_load_state('networkidle')
-        except PlaywrightTimeoutError:
-            print(f"Timeout occurred loading {url}")
-            return
+            print(f"{'  ' * depth}Crawling {url}")
+            self.visited_urls.add(url)
 
-        current_item = self.page.query_selector('div.hierarchy-item.selected')
-        if not current_item:
-            print(f"{'  ' * depth}Cannot find item in hierarchy")
-            return
+            try:
+                self.page.goto(url)
+                self.page.wait_for_load_state('networkidle')
+            except PlaywrightTimeoutError:
+                print(f"Timeout occurred loading {url}")
+                return
+
+            current_item = self.page.query_selector('div.hierarchy-item.selected')
+            if not current_item:
+                print(f"{'  ' * depth}Cannot find item in hierarchy")
+                return
         
-        children_container = current_item.query_selector('+ div.hierarchy-children')
-        if not children_container:
-            print(f"{'  ' * depth}No children found for this page")
-            self.scrape_leaf_page(url)
-            return
+            children_container = current_item.query_selector('+ div.hierarchy-children')
+            if not children_container:
+                print(f"{'  ' * depth}No children found for this page")
+                self.scrape_leaf_page(url)
+                return
 
-        hierarchy_items = children_container.query_selector_all('> ul.hierarchy-list > li > div.hierarchy-item')
+            hierarchy_items = children_container.query_selector_all('> ul.hierarchy-list > li > div.hierarchy-item')
         
-        if not hierarchy_items:
-            print("No hierarchy items found.")
-            # print(self.page.content())
-            return
+            if not hierarchy_items:
+                print("No hierarchy items found.")
+                # print(self.page.content())
+                continue
 
-        print(f"{'  ' * depth}Found {len(hierarchy_items)} items on {url}")
+            print(f"{'  ' * depth}Found {len(hierarchy_items)} items on {url}")
 
-        # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
-        self.random_delay()
+            # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
+            self.random_delay()
 
-        for index, item in enumerate(hierarchy_items):
-            item_html = item.evaluate('(element) => element.outerHTML')
-            print(f"{'  ' * depth}Processing item {index + 1}/{len(hierarchy_items)}: {item_html}")
-
-            link = item.query_selector('a')
-            if link:
+            for item in (hierarchy_items):
+                link = item.query_selector('a')
+                if not link:
+                    print(f"{'  ' * depth}No link for {item}")
+                    continue
+                
                 href = link.get_attribute('href')
                 if href is None:
                     print(f"{'  ' * depth}Empty href for {item}")
@@ -115,27 +122,17 @@ class Scraper:
                         print(f"{'  ' * depth}Expanding: {title}")
                         expand_collapse.click()
                         self.page.wait_for_load_state('networkidle')
+                
+                queue.append((normalized_href, depth + 1))
 
-                    print(f"{'  ' * depth}Crawling child hierarchy: {normalized_href}")
-                    self.crawl_with_retry(normalized_href, parent_url=url, depth=depth + 1)
-                else:
-                    print(f"{'  ' * depth}Scraping leaf page: {normalized_href}")
-                    self.scrape_with_retry(normalized_href)
-            else:
-                print(f"{'  ' * depth}No link for item {item}")
-
-            if parent_url and index < len(hierarchy_items) - 1:
-                print(f"{'  ' * depth}Returning to parent URL {parent_url}")
-                self.page.goto(parent_url)
-                self.page.wait_for_load_state('networkidle')
     
     # the server seems to be quite unreliable, created this for robustness
-    def crawl_with_retry(self, url, parent_url=None, depth=0, max_retries=3):
-        for attempt in range(max_retries):
+    def crawl_with_retry(self, url):
+        for attempt in range(self.MAX_RETRIES):
             try:
-                return self.crawl_hierarchy(url, parent_url, depth)
+                return self.crawl_hierarchy(url)
             except Exception as e:
-                if attempt < max_retries - 1:
+                if attempt < self.MAX_RETRIES - 1:
                     wait_time = 2 ** attempt
                     print(f"Retrying crawl for {url}")
                     time.sleep(wait_time)
@@ -158,12 +155,12 @@ class Scraper:
 
         return None
     
-    def scrape_with_retry(self, url, max_retries=3):
+    def scrape_with_retry(self, url):
         try:
-            for attempt in range(max_retries):
+            for attempt in range(self.MAX_RETRIES):
                 return self.scrape_leaf_page(url)
         except Exception as e:
-            if attempt < max_retries - 1:
+            if attempt < self.MAX_RETRIES - 1:
                 wait_time = 2 ** attempt
                 print(f"Retrying scrape for {url}")
                 time.sleep(wait_time)
@@ -197,9 +194,13 @@ class Scraper:
             self.login()
             start_url = self.config['urls']['secure']
             print("starting scraping")
-            self.crawl_with_retry(start_url, parent_url=None, depth=0)
+            self.crawl_with_retry(start_url)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
+        finally:
+            print("Visited URLs:")
+            for url in self.visited_urls:
+                print(url)
     
     def random_delay(self):
         delay = random.uniform(self.config['scraping']['min_delay'],
