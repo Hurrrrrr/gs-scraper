@@ -13,6 +13,7 @@ class Scraper:
         self.browser = self.playwright.chromium.launch(headless=True)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
+        self.visited_urls = set()
     
     def login(self):
         print("starting login")
@@ -53,6 +54,12 @@ class Scraper:
     
     def crawl_hierarchy(self, url, parent_url=None, depth = 0):
         print(f"{'  ' * depth}crawling {url} (Parent = {parent_url})")
+
+        if url in self.visited_urls:
+            print(f"{'  ' * depth}Already visited {url}, skipping")
+
+        self.visited_urls.add(url)
+
         try:
             self.page.goto(url)
             self.page.wait_for_load_state('networkidle')
