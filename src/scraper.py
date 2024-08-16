@@ -68,6 +68,7 @@ class Scraper:
             self.visited_urls.add(url)
 
             try:
+                self.random_delay()
                 self.page.goto(url)
                 self.page.wait_for_load_state('networkidle')
             except PlaywrightTimeoutError:
@@ -94,9 +95,6 @@ class Scraper:
 
             print(f"{'  ' * depth}Found {len(hierarchy_items)} items on {url}")
 
-            # !!! this is recursive, remember to prevent it from scraping everything during testing!!!
-            self.random_delay()
-
             for item in (hierarchy_items):
                 link = item.query_selector('a')
                 if not link:
@@ -118,10 +116,7 @@ class Scraper:
 
                 if 'with-children' in item_class:
                     expand_collapse = link.query_selector('span.expand-collapse')
-                    if expand_collapse and 'collapsed' in expand_collapse.get_attribute('class'):
-                        print(f"{'  ' * depth}Expanding: {title}")
-                        expand_collapse.click()
-                        self.page.wait_for_load_state('networkidle')
+                    self.expand_collapse_with_retry(expand_collapse, title, depth)
                 
                 queue.append((normalized_href, depth + 1))
 
@@ -167,6 +162,31 @@ class Scraper:
             else:
                 print(f"Failed to scrape {url} after max retries")
                 logging.error(f"Error occurred while scraping {url}: {str(e)}")
+    
+    def expand_collapse_with_retry(self, expand_collapse, title, depth):
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                if expand_collapse and 'collapsed' in expand_collapse.get_attribute('class'):
+                        print(f"{'  ' * depth}Expanding: {title}")
+                        expand_collapse.click()
+                        self.page.wait_for_load_state('networkidle')
+                        return True
+                else:
+                    return False
+            except PlaywrightTimeoutError:
+                logging.warning(f"Timeout while expanding {title}. Retrying...")
+            except Exception as e:
+                logging.warning(f"Error while expanding {title}: {str(e)}. Retrying...")
+
+            if attempt < self.MAX_RETRIES - 1:
+                wait_time = 2 ** attempt
+                logging.warning(f"Retrying expand/collapse for {title} (Attempt {attempt + 1}/{self.MAX_RETRIES})")
+                time.sleep(wait_time)
+            else:
+                logging.error(f"Failed to expand/collapse {title} after {self.MAX_RETRIES} attempts")
+                return False
+        
+        return False
 
 
 
