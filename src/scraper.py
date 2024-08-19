@@ -15,7 +15,7 @@ class Scraper:
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
-        self.MAX_RETRIES = 3
+        self.max_retries = self.config['settings']['max_retries']
     
     def login(self):
         print("starting login")
@@ -66,14 +66,23 @@ class Scraper:
 
             print(f"{'  ' * depth}Crawling {url}")
 
-            try:
-                self.random_delay()
-                self.page.goto(url)
-                self.page.wait_for_load_state('networkidle')
-                self.visited_urls.add(url)
-            except PlaywrightTimeoutError:
-                print(f"Timeout occurred loading {url}")
-                continue
+            for attempt in range(self.max_retries):
+                try:
+                    self.random_delay()
+                    self.page.goto(url)
+                    self.page.wait_for_load_state('networkidle')
+                    self.visited_urls.add(url)
+                    break
+                except Exception as e:
+                    if attempt < self.max_retries - 1:
+                        wait_time = 2 ** attempt
+                        print(f"Retrying crawl for {url}")
+                        time.sleep(wait_time)
+                        continue
+                else:
+                    print(f"Max retries for {url} reached, skipping")
+                    logging.error(f"Error {str(e)}, failed to crawl {url} after max attempts")
+                    continue
 
             current_item = self.page.query_selector('div.hierarchy-item.selected')
             if not current_item:
@@ -118,11 +127,11 @@ class Scraper:
     
     # the server seems to be quite unreliable, created this for robustness
     def crawl_with_retry(self, url):
-        for attempt in range(self.MAX_RETRIES):
+        for attempt in range(self.max_retries):
             try:
                 return self.crawl_hierarchy(url)
             except Exception as e:
-                if attempt < self.MAX_RETRIES - 1:
+                if attempt < self.max_retries - 1:
                     wait_time = 2 ** attempt
                     print(f"Retrying crawl for {url}")
                     time.sleep(wait_time)
@@ -147,10 +156,10 @@ class Scraper:
     
     def scrape_with_retry(self, url):
         try:
-            for attempt in range(self.MAX_RETRIES):
+            for attempt in range(self.max_retries):
                 return self.scrape_leaf_page(url)
         except Exception as e:
-            if attempt < self.MAX_RETRIES - 1:
+            if attempt < self.max_retries - 1:
                 wait_time = 2 ** attempt
                 print(f"Retrying scrape for {url}")
                 time.sleep(wait_time)
@@ -183,7 +192,7 @@ class Scraper:
             self.login()
             start_url = self.config['urls']['secure']
             print("starting scraping")
-            self.crawl_with_retry(start_url)
+            self.crawl_hierarchy(start_url)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
         finally:
@@ -192,8 +201,8 @@ class Scraper:
                 print(url)
     
     def random_delay(self):
-        delay = random.uniform(self.config['scraping']['min_delay'],
-                               self.config['scraping']['max_delay'])
+        delay = random.uniform(self.config['settings']['min_delay'],
+                               self.config['settings']['max_delay'])
         time.sleep(delay)
     
     def close(self):
