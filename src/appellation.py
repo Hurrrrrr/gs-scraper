@@ -14,14 +14,17 @@ class Appellation:
 class Style(Appellation):
     def __init__(self):
         self.wine_type = wine_type  # white, red, etc.
-        self.grapes_min = grapes_min
+        self.grapes_min = grapes_min    # k-v pair: chard: 85
         self.grapes_max = grapes_max
-        self.min_pa = min_pa    # potential alcohol, different than abv!
+        self.num_grapes
+        self.min_pa = min_pa    # potential alcohol
+        self.min_rs = min_rs
         self.max_rs = max_rs
         self.harvesting = harvesting    # should this be bool or list of strings?
         self.chapitalization = chapitalization  # bool
         self.training = training    # single guyot, etc.
         self.max_yield = max_yield  # hl/ha
+        self.elevage = elevage
         self.year_established = year_established    # if different than Appellation
 
         self.fermentation = fermentation    # traditional, charmat
@@ -29,4 +32,7 @@ class Style(Appellation):
         self.pressure   # atmospheres of pressure
 
         self.rose = rose    # saignee, blending, maceration
+
+        self.botrytis = botrytis    # bool
+        self.min_aa = min_aa    # acquired alcohol
 

@@ -126,13 +126,39 @@ class Scraper:
                 queue.append((normalized_href, depth + 1))
 
     def scrape_leaf_page(self, url):
-        self.page.goto(url)
-        self.page.wait_for_load_state('networkidle')
-        html_content = self.page.content()
-        soup = bs(html_content, 'html.parser')
+        try:
+            self.page.goto(url)
+            self.page.wait_for_load_state('networkidle')
+            html_content = self.page.content()
+            soup = bs(html_content, 'html.parser')
 
-        # scraping logic goes here
-        print(f"scrape_leaf_page({url}) called")
+            target_div = soup.select_one("div.content-fragment-content div.content.full.without-author.text div.content div.compendium div")
+            if target_div:
+                ul_content = target_div.find('ul')
+                if ul_content:
+                    list_items = ul_content.find_all('li', recursive=True)
+                    data = {}
+                    for item in list_items:
+                        key = item.find('strong')
+                        if key:
+                            key_text = key.text.strip().rstrip(':')
+                            value = item.text.replace(key.text, '').strip()
+
+                            if item.find('ul'):
+                                nested_items = item.find('ul').find_all('li', recursive=False)
+                                value = [nested_item.text.strip() for nested_item in nested_items]
+                            
+                            data[key_text] = value
+                    return data
+                else:
+                    print(f"Couldn't find target ul element on page {url}")
+            else:
+                print(f"Couldn't find target div on page {url}")
+        
+        except PlaywrightTimeoutError:
+            print(f"Timeout error for {url}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
         return None
     
