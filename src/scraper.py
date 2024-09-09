@@ -66,6 +66,7 @@ class Scraper:
 
             print(f"{'  ' * depth}Crawling {url}")
 
+            # website is very unreliable, this is very necessary!
             for attempt in range(self.max_retries):
                 try:
                     self.random_delay()
@@ -92,7 +93,7 @@ class Scraper:
             children_container = current_item.query_selector('+ div.hierarchy-children')
             if not children_container:
                 print(f"{'  ' * depth}No children found for this page")
-                self.scrape_leaf_page(url)
+                self.scrape_with_retry(url)
                 continue
 
             hierarchy_items = children_container.query_selector_all('> ul.hierarchy-list > li > div.hierarchy-item')
@@ -124,39 +125,21 @@ class Scraper:
                 
                 queue.append((normalized_href, depth + 1))
 
-    
-    # the server seems to be quite unreliable, created this for robustness
-    def crawl_with_retry(self, url):
-        for attempt in range(self.max_retries):
-            try:
-                return self.crawl_hierarchy(url)
-            except Exception as e:
-                if attempt < self.max_retries - 1:
-                    wait_time = 2 ** attempt
-                    print(f"Retrying crawl for {url}")
-                    time.sleep(wait_time)
-                else:
-                    print(f"Max retries for {url} reached, skipping")
-                    logging.error(f"Error {str(e)}, failed to crawl {url} after max attempts")
-        return None
-
     def scrape_leaf_page(self, url):
-        self.random_delay()
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
         html_content = self.page.content()
         soup = bs(html_content, 'html.parser')
 
         # scraping logic goes here
-        print("scrape_leaf_page() called")
-
-        logging.info(f"Successfully scraped data from {url}")
+        print(f"scrape_leaf_page({url}) called")
 
         return None
     
     def scrape_with_retry(self, url):
         try:
             for attempt in range(self.max_retries):
+                self.random_delay()
                 return self.scrape_leaf_page(url)
         except Exception as e:
             if attempt < self.max_retries - 1:
