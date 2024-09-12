@@ -11,7 +11,8 @@ class Scraper:
     def __init__(self, config, playwright):
         self.config = config
         self.playwright = playwright
-        self.browser = self.playwright.chromium.launch(headless=True)
+        # temporary False for testing
+        self.browser = self.playwright.chromium.launch(headless=False)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
@@ -126,17 +127,26 @@ class Scraper:
                 queue.append((normalized_href, depth + 1))
 
     def scrape_leaf_page(self, url):
+        print(f"calling scrape_leaf_page({url})")
         try:
             self.page.goto(url)
-            self.page.wait_for_load_state('networkidle')
+            print(f"waiting for {url} to load")
+            self.page.wait_for_load_state('networkidle', timeout=30000)
+            print("finding html content")
             html_content = self.page.content()
+            print(f"html_content = {html_content}")
             soup = bs(html_content, 'html.parser')
+            print(f"soup: {soup}")
 
             target_div = soup.select_one("div.content-fragment-content div.content.full.without-author.text div.content div.compendium div")
+            if not target_div:
+                print("couldn't find target div")
             if target_div:
                 ul_content = target_div.find('ul')
+                print(f"ul_content = {ul_content}")
                 if ul_content:
                     list_items = ul_content.find_all('li', recursive=True)
+                    print(f"list_items = {list_items}")
                     data = {}
                     for item in list_items:
                         key = item.find('strong')
@@ -149,6 +159,8 @@ class Scraper:
                                 value = [nested_item.text.strip() for nested_item in nested_items]
                             
                             data[key_text] = value
+                            print(f"data[key_text]: {data[key_text]}")
+                    print(f"data = {data}")
                     return data
                 else:
                     print(f"Couldn't find target ul element on page {url}")
@@ -199,9 +211,11 @@ class Scraper:
     def start_scraping(self):
         try:
             self.login()
-            start_url = self.config['urls']['secure']
-            print("starting scraping")
-            self.crawl_hierarchy(start_url)
+            # start_url = self.config['urls']['secure']
+            # self.crawl_hierarchy(start_url)
+            start_url = self.config['urls']['test']
+            test_output = self.scrape_leaf_page(start_url)
+            print(test_output)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
         finally:
