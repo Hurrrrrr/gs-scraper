@@ -11,8 +11,7 @@ class Scraper:
     def __init__(self, config, playwright):
         self.config = config
         self.playwright = playwright
-        # temporary False for testing
-        self.browser = self.playwright.chromium.launch(headless=False)
+        self.browser = self.playwright.chromium.launch(headless=True)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
@@ -131,17 +130,21 @@ class Scraper:
         try:
             self.page.goto(url)
             print(f"waiting for {url} to load")
-            self.page.wait_for_load_state('networkidle', timeout=30000)
-            print("finding html content")
-            html_content = self.page.content()
-            print(f"html_content = {html_content}")
-            soup = bs(html_content, 'html.parser')
-            print(f"soup: {soup}")
 
-            target_div = soup.select_one("div.content-fragment-content div.content.full.without-author.text div.content div.compendium div")
+            # for debugging networkidle issue
+            # self.page.on("request", lambda request: print(f"Request: {request.url}"))
+            # self.page.on("response", lambda response: print(f"Response: {response.url} - {response.status}"))
+
+            # not using networkidle here because SSE and WebSockets connections are persistant with this page
+            self.page.wait_for_selector('div.content-fragment-content div.content.full.without-author.text div.content div.compendium div', timeout=30000)
+            html_content = self.page.content()
+            soup = bs(html_content, 'html.parser')
+
+            target_div = soup.select_one("div.content-fragment-content div.content.full.without-author.text div.content div.compendium > div:nth-of-type(2)")
             if not target_div:
                 print("couldn't find target div")
             if target_div:
+                print(f"target div: {target_div}")
                 ul_content = target_div.find('ul')
                 print(f"ul_content = {ul_content}")
                 if ul_content:
