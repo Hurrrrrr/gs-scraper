@@ -11,7 +11,7 @@ class Scraper:
     def __init__(self, config, playwright):
         self.config = config
         self.playwright = playwright
-        self.browser = self.playwright.chromium.launch(headless=False)
+        self.browser = self.playwright.chromium.launch(headless=True)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
@@ -163,6 +163,8 @@ class Scraper:
                             data[key_text] = value
                             print(f"data[key_text]: {data[key_text]}")
                     print(f"data = {data}")
+                    with open("output.txt", "w") as f:
+                        print(data, file=f)
                     return data
                 else:
                     print(f"Couldn't find target ul element on page {url}")
