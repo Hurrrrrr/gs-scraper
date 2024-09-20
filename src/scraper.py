@@ -11,7 +11,7 @@ class Scraper:
     def __init__(self, config, playwright):
         self.config = config
         self.playwright = playwright
-        self.browser = self.playwright.chromium.launch(headless=True)
+        self.browser = self.playwright.chromium.launch(headless=False)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
         self.visited_urls = set()
@@ -21,7 +21,8 @@ class Scraper:
         print("starting login")
         login_url = self.config['urls']['login']
         self.page.goto(login_url)
-        self.page.wait_for_load_state('networkidle')
+        # not using networkidle here because SSE/websocket on this site can prevent networkidle
+        self.page.wait_for_selector('a.login', timeout=10000)
 
         html_content = self.page.content()
         soup = bs(html_content, 'html.parser')
@@ -46,8 +47,6 @@ class Scraper:
             logging.info({self.page.content})
             raise Exception("Login failed, submit button not found")
 
-        self.page.wait_for_load_state('networkidle')
-
         if self.is_login_successful():
             logging.info("Login Successful")
         else:
@@ -71,7 +70,7 @@ class Scraper:
                 try:
                     self.random_delay()
                     self.page.goto(url)
-                    self.page.wait_for_load_state('networkidle')
+                    self.page.wait_for_load_state('networkidle', timeout=10000)
                     self.visited_urls.add(url)
                     break
                 except Exception as e:
