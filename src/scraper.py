@@ -6,6 +6,7 @@ from playwright.sync_api import sync_playwright
 import urllib.parse
 from requests.exceptions import RequestException
 from collections import deque
+from unidecode import unidecode
 
 class Scraper:
     def __init__(self, config, playwright):
@@ -143,12 +144,9 @@ class Scraper:
             if not target_div:
                 print("couldn't find target div")
             if target_div:
-                print(f"target div: {target_div}")
                 ul_content = target_div.find('ul')
-                print(f"ul_content = {ul_content}")
                 if ul_content:
                     list_items = ul_content.find_all('li', recursive=True)
-                    print(f"list_items = {list_items}")
                     data = {}
                     for item in list_items:
                         key = item.find('strong')
@@ -161,11 +159,11 @@ class Scraper:
                                 value = [nested_item.text.strip() for nested_item in nested_items]
                             
                             data[key_text] = value
-                            print(f"data[key_text]: {data[key_text]}")
-                    print(f"data = {data}")
+                    data['title'] = soup.select_one("h1.name").string
+                    cleaned_data = self.process_data(data)
                     with open("output.txt", "w") as f:
-                        print(data, file=f)
-                    return data
+                        print(cleaned_data, file=f)
+                    return cleaned_data
                 else:
                     print(f"Couldn't find target ul element on page {url}")
             else:
@@ -212,6 +210,31 @@ class Scraper:
         else:
             return urllib.parse.urljoin(self.config['urls']['base'] + '/', href_string)
     
+    def clean_dict(self, d):
+        if isinstance(d, dict):
+            return {self.clean_dict(k): self.clean_dict(v) for k, v in d.items()}
+        elif isinstance(d, list):
+            return [self.clean_dict(i) for i in d]
+        elif isinstance(d, str):
+            return d.replace('\n', '').replace('\xa0', ' ').strip()
+        else:
+            return d
+    
+    def decode_dict(self, d):
+        if isinstance(d, dict):
+            return {self.decode_dict(k): self.decode_dict(v) for k, v in d.items()}
+        elif isinstance(d, list):
+            return [self.decode_dict(i) for i in d]
+        elif isinstance(d, str):
+            return unidecode(d)
+        else:
+            return d
+    
+    def process_data(self, data):
+        cleaned_data = self.clean_dict(data)
+        decoded_data = self.decode_dict(cleaned_data)
+        return decoded_data
+    
     def start_scraping(self):
         try:
             self.login()
@@ -219,7 +242,6 @@ class Scraper:
             # self.crawl_hierarchy(start_url)
             start_url = self.config['urls']['test']
             test_output = self.scrape_leaf_page(start_url)
-            print(test_output)
         except Exception as e:
             logging.error(f"Scraping error {str(e)}")
         finally:
