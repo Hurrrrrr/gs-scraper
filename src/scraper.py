@@ -160,6 +160,8 @@ class Scraper:
                             
                             data[key_text] = value
                     data['title'] = soup.select_one("h1.name").string
+                    data['region'] = soup.select_one('li.selected').find_parent('ul').find_previous_sibling('div').find('a').text.strip()
+                    print(data['region'])
                     cleaned_data = self.process_data(data)
                     with open("output.txt", "w") as f:
                         print(cleaned_data, file=f)
@@ -216,7 +218,7 @@ class Scraper:
         elif isinstance(d, list):
             return [self.clean_dict(i) for i in d]
         elif isinstance(d, str):
-            return d.replace('\n', '').replace('\xa0', ' ').strip()
+            return d.replace('\n', '').replace('\xa0', ' ').lower().strip()     # does lower here affect LLM performance?
         else:
             return d
     
