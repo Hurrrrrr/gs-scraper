@@ -147,6 +147,7 @@ class Scraper:
                 ul_content = target_div.find('ul')
                 if ul_content:
                     list_items = ul_content.find_all('li', recursive=True)
+                    print(f"list items: {list_items}")
                     data = {}
                     for item in list_items:
                         key = item.find('strong')
@@ -161,7 +162,7 @@ class Scraper:
                             data[key_text] = value
                     data['title'] = soup.select_one("h1.name").string
                     data['region'] = soup.select_one('li.selected').find_parent('ul').find_previous_sibling('div').find('a').text.strip()
-                    print(data['region'])
+                    print(f"data: {data}")
                     cleaned_data = self.process_data(data)
                     with open("output.txt", "w") as f:
                         print(cleaned_data, file=f)
