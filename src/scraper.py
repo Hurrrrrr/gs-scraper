@@ -147,9 +147,8 @@ class Scraper:
                 ul_content = target_div.find('ul')
                 if ul_content:
                     list_items = ul_content.find_all('li', recursive=True)
-                    print(f"list items: {list_items}")
                     data = {}
-                    for item in list_items:
+                    for index, item in enumerate(list_items):
                         key = item.find('strong')
                         if key:
                             key_text = key.text.strip().rstrip(':')
@@ -160,8 +159,32 @@ class Scraper:
                                 value = [nested_item.text.strip() for nested_item in nested_items]
                             
                             data[key_text] = value
+                    
                     data['title'] = soup.select_one("h1.name").string
-                    data['region'] = soup.select_one('li.selected').find_parent('ul').find_previous_sibling('div').find('a').text.strip()
+                    # data['region'] = soup.select_one('li.selected').find_parent('ul').find_previous_sibling('div').find('a').text.strip()
+                    try:
+                        selected_li = soup.select_one('li.selected')
+                        if selected_li:
+                            parent_ul = selected_li.find_parent('ul')
+                            if parent_ul:
+                                previous_div = parent_ul.find_previous_sibling('div')
+                                if previous_div:
+                                    a_tag = previous_div.find('a')
+                                    if a_tag:
+                                        data['region'] = a_tag.text.strip()
+                                    else:
+                                        print("No <a> tag found in the previous sibling div")
+                                else:
+                                    print("No previous sibling div found")
+                            else:
+                                print("No parent <ul> found for the selected <li>")
+                        else:
+                            print("No <li> with class 'selected' found")
+                    except Exception as e:
+                        print(f"Error while trying to find the region: {str(e)}")
+
+                    # Add this line to ensure we have a region, even if it's empty
+                    data['region'] = data.get('region', '')
                     print(f"data: {data}")
                     cleaned_data = self.process_data(data)
                     with open("output.txt", "w") as f:
